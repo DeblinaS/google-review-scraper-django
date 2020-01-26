@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <style type="text/css">
+    label, .input-cell{
+      width:98%;
+    }
+    form{
+      padding:20px;
+    }
+    .container{
+      display: table;
+    margin: 0 auto;
+    }
+    .input-cell{
+      padding: 5px;
+    margin: 5px 0 10px;
+    }
+    label{
+      font-family: sans-serif;
+    }
+    .submit-btn{
+      margin-top:10px;
+      box-sizing: unset;
+    /* width: 200px; */
+    /* height: 104px; */
+    padding: 7px 15px !important;
+    background: red;
+    font-size: 16px;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: bold;
+    }
+    .heading{
+      text-align: center;
+    font-size: 25px;
+    /* font-weight: bold; */
+    font-family: sans-serif;
+    margin: 20px 0;
+    }
+    form{
+      background-color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="heading">Review scraper</div>
+  <form name = "form" method="post" action="{% url 'polls:submit' %}">
+  {% csrf_token %}
+<label>Enter URL</label>  
+<input class="input-cell" name="url" type="url">
+<label>Enter no. of reviews</label>
+<input class="input-cell" type="number" name="number">
+<label>Enter file name</label>
+<input class="input-cell" type="text" name="file">
+<input class="submit-btn" type="submit" value="Submit">
+</form>
+<div>
+</body>
+</html>
