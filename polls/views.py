@@ -7,19 +7,13 @@ import argparse
 import csv
 from django.urls import reverse
 from polls.forms import LoginForm
+import pandas as pd
 
 HEADER = ['id_review', 'rating', 'col1', 'review', 'timestamp', 'url_user', 'time_ago', 'user_name','col2']
 
 def index(request):
 
     return render(request, "polls/index.html")
-
-def csv_writer(path='polls/mydata/', outfile='gm_reviews.csv'):
-	print('in csv')
-	targetfile = open(path + outfile, mode='w', encoding='utf-8', newline='\n')
-	writer = csv.writer(targetfile, quoting=csv.QUOTE_MINIMAL)
-	writer.writerow(HEADER)
-	return writer   
 
 def save_file(request):
 	print('in save')
@@ -37,7 +31,6 @@ def submit(request):
 			number = MyLoginForm.cleaned_data['number']
 			url=MyLoginForm.cleaned_data['url']
 			file=MyLoginForm.cleaned_data['file']
-			writer = csv_writer() 			
 			with GoogleMapsScraper() as scraper:
 				# with open(args, 'r') as urls_file:
 					# for url in urls_file:
@@ -45,9 +38,11 @@ def submit(request):
 							if error == -1:
 		                        # store reviews in CSV file
 								n = 0
+								rev=[]
 								while n < number:
 									reviews = scraper.get_reviews(n)
-									for r in reviews:
-										writer.writerow(list(r.values()))
+									rev.extend(reviews)		
 									n += len(reviews)
+								df = pd.DataFrame(rev)
+								df.to_csv('polls/mydata/gm_reviews.csv',index=False)	
 	return HttpResponseRedirect(reverse('polls:save_file'))													
